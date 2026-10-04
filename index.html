@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Engineering Accurate Marks Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 700px;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0f766e;
+            margin-bottom: 4px;
+            font-size: 24px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .section-title {
+            background-color: #e6fffa;
+            color: #0d9488;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid #0d9488;
+            font-size: 16px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            color: #334155;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .split-inputs {
+            display: flex;
+            gap: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #0f766e;
+            outline: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button.calc-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #0f766e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button.calc-btn.secondary {
+            background-color: #0284c7;
+        }
+
+        button.calc-btn:hover {
+            opacity: 0.9;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f0fdf4;
+            border-radius: 10px;
+            border-left: 6px solid #0f766e;
+            display: none;
+        }
+
+        .result-item {
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+
+        .result-item span {
+            font-weight: bold;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .target-box {
+            margin-top: 12px;
+            padding: 10px;
+            background-color: #f8fafc;
+            border: 1px dashed #0f766e;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #0f766e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Pre-Engineering Marks Portal</h2>
+        <p class="subtitle">Class XI (550 Marks) & Class XII (550 Marks)</p>
+
+        <!-- CLASS XI SECTION -->
+        <div class="section-title">Class XI Marks (Total: 550)</div>
+        <div class="grid-2">
+            <div class="input-group">
+                <label for="xi_urdu">1. Urdu (Out of 100):</label>
+                <input type="number" id="xi_urdu" placeholder="0-100" max="100" min="0">
+            </div>
+            <div class="input-group">
+                <label for="xi_eng">2. English (Out of 100):</label>
+                <input type="number" id="xi_eng" placeholder="0-100" max="100" min="0">
+            </div>
+            <div class="input-group">
+                <label for="xi_isl">3. Islamic Education (Out of 50):</label>
+                <input type="number" id="xi_isl" placeholder="0-50" max="50" min="0">
+            </div>
+            <div class="input-group">
+                <label for="xi_math">4. Mathematics (Out of 100):</label>
+                <input type="number" id="xi_math" placeholder="0-100" max="100" min="0">
+            </div>
+            <div class="input-group">
+                <label>5. Physics (85 Theory + 15 Practical):</label>
+                <div class="split-inputs">
+                    <input type="number" id="xi_phy_th" placeholder="Theory (0-85)" max="85" min="0">
+                    <input type="number" id="xi_phy_pr" placeholder="Practical (0-15)" max="15" min="0">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>6. Chemistry (85 Theory + 15 Practical):</label>
+                <div class="split-inputs">
+                    <input type="number" id="xi_chem_th" placeholder="Theory (0-85)" max="85" min="0">
+                    <input type="number" id="xi_chem_pr" placeholder="Practical (0-15)" max="15" min="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- CLASS XII SECTION -->
+        <div class="section-title">Class XII Marks / Expected Marks (Total: 550)</div>
+        <div class="grid-2">
+            <div class="input-group">
+                <label for="xii_urdu">1. Urdu (Out of 100):</label>
+                <input type="number" id="xii_urdu" placeholder="0-100" max="100" min="0">
+            </div>
+            <div class="input-group">
+                <label for="xii_eng">2. English (Out of 100):</label>
+                <input type="number" id="xii_eng" placeholder="0-100" max="100" min="0">
+            </div>
+            <div class="input-group">
+                <label for="xii_pst">3. Pakistan Studies (Out of 50):</label>
+                <input type="number" id="xii_pst" placeholder="0-50" max="50" min="0">
+            </div>
+            <div class="input-group">
+                <label for="xii_math">4. Mathematics (Out of 100):</label>
+                <input type="number" id="xii_math" placeholder="0-100" max="100" min="0">
+            </div>
+            <div class="input-group">
+                <label>5. Physics (85 Theory + 15 Practical):</label>
+                <div class="split-inputs">
+                    <input type="number" id="xii_phy_th" placeholder="Theory (0-85)" max="85" min="0">
+                    <input type="number" id="xii_phy_pr" placeholder="Practical (0-15)" max="15" min="0">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>6. Chemistry (85 Theory + 15 Practical):</label>
+                <div class="split-inputs">
+                    <input type="number" id="xii_chem_th" placeholder="Theory (0-85)" max="85" min="0">
+                    <input type="number" id="xii_chem_pr" placeholder="Practical (0-15)" max="15" min="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- TARGET PERCENTAGE -->
+        <div class="input-group" style="margin-top: 10px;">
+            <label for="targetPerc">Target Overall Percentage (%) (Optional):</label>
+            <input type="number" id="targetPerc" placeholder="e.g. 80" max="100" min="0">
+        </div>
+
+        <div class="btn-group">
+            <button class="calc-btn secondary" onclick="calculateXIOnly()">Calculate XI Only</button>
+            <button class="calc-btn" onclick="calculateCombined()">Calculate Combined (XI + XII)</button>
+        </div>
+
+        <!-- RESULT SECTION -->
+        <div id="resultBox" class="result-box">
+            <div class="result-item" id="resXi"></div>
+            <div class="result-item" id="resXii"></div>
+            <div class="result-item" id="resTotal"></div>
+            <div class="result-item" id="resPerc"></div>
+            <div class="result-item" id="resGrade"></div>
+            <div class="result-item" id="resDesc"></div>
+            <div class="target-box" id="targetResult" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        function getVal(id) {
+            const el = document.getElementById(id);
+            if (!el || el.value.trim() === "") return 0;
+            const val = parseFloat(el.value);
+            return isNaN(val) ? 0 : val;
+        }
+
+        function getGrading(percentage) {
+            if (percentage >= 96) return { grade: "A++", desc: "Extra Ordinary ⭐", color: "#16a34a" };
+            if (percentage >= 91) return { grade: "A+", desc: "Exceptional 🏆", color: "#16a34a" };
+            if (percentage >= 86) return { grade: "A", desc: "Outstanding 🥇", color: "#15803d" };
+            if (percentage >= 81) return { grade: "B++", desc: "Excellent 📊", color: "#0284c7" };
+            if (percentage >= 76) return { grade: "B+", desc: "Very Good 👍", color: "#0369a1" };
+            if (percentage >= 71) return { grade: "B", desc: "Good 📘", color: "#2563eb" };
+            if (percentage >= 61) return { grade: "C+", desc: "Fairly Good 📑", color: "#d97706" };
+            if (percentage >= 51) return { grade: "C", desc: "Average 📋", color: "#ca8a04" };
+            if (percentage >= 40) return { grade: "D", desc: "Above Average / Emerging 📶", color: "#ea580c" };
+            return { grade: "U", desc: "Ungraded ❌", color: "#dc2626" };
+        }
+
+        function getXiTotal() {
+            return getVal('xi_urdu') + 
+                   getVal('xi_eng') + 
+                   getVal('xi_isl') + 
+                   getVal('xi_math') + 
+                   getVal('xi_phy_th') + getVal('xi_phy_pr') + 
+                   getVal('xi_chem_th') + getVal('xi_chem_pr');
+        }
+
+        function getXiiTotal() {
+            return getVal('xii_urdu') + 
+                   getVal('xii_eng') + 
+                   getVal('xii_pst') + 
+                   getVal('xii_math') + 
+                   getVal('xii_phy_th') + getVal('xii_phy_pr') + 
+                   getVal('xii_chem_th') + getVal('xii_chem_pr');
+        }
+
+        // Calculate Only First Year (Class XI)
+        function calculateXIOnly() {
+            const xiTotal = getXiTotal();
+            const xiPerc = (xiTotal / 550) * 100;
+            const info = getGrading(xiPerc);
+
+            document.getElementById('resXi').innerHTML = `Class XI Total: <span>${xiTotal} / 550</span>`;
+            document.getElementById('resXii').innerHTML = `Class XII Total: <span>Not Included</span>`;
+            document.getElementById('resTotal').innerHTML = `Total Score: <span>${xiTotal} / 550</span>`;
+            document.getElementById('resPerc').innerHTML = `XI Percentage: <span>${xiPerc.toFixed(2)}%</span>`;
+            document.getElementById('resGrade').innerHTML = `XI Grade: <span class="grade-badge" style="background-color:${info.color}">${info.grade}</span>`;
+            document.getElementById('resDesc').innerHTML = `Remarks: <b>${info.desc}</b>`;
+
+            calculateTarget(xiTotal);
+            document.getElementById('resultBox').style.display = "block";
+        }
+
+        // Calculate Combined (XI + XII)
+        function calculateCombined() {
+            const xiTotal = getXiTotal();
+            const xiiTotal = getXiiTotal();
+
+            const combinedTotal = xiTotal + xiiTotal;
+            const combinedPerc = (combinedTotal / 1100) * 100;
+            const xiPerc = (xiTotal / 550) * 100;
+            const info = getGrading(combinedPerc);
+
+            document.getElementById('resXi').innerHTML = `Class XI Total: <span>${xiTotal} / 550</span> (${xiPerc.toFixed(2)}%)`;
+            document.getElementById('resXii').innerHTML = `Class XII Total: <span>${xiiTotal} / 550</span>`;
+            document.getElementById('resTotal').innerHTML = `Combined Total: <span>${combinedTotal} / 1100</span>`;
+            document.getElementById('resPerc').innerHTML = `Combined Percentage: <span>${combinedPerc.toFixed(2)}%</span>`;
+            document.getElementById('resGrade').innerHTML = `Overall Grade: <span class="grade-badge" style="background-color:${info.color}">${info.grade}</span>`;
+            document.getElementById('resDesc').innerHTML = `Remarks: <b>${info.desc}</b>`;
+
+            calculateTarget(xiTotal);
+            document.getElementById('resultBox').style.display = "block";
+        }
+
+        // Target Calculator Logic
+        function calculateTarget(xiTotal) {
+            const targetP = parseFloat(document.getElementById('targetPerc').value);
+            const targetBox = document.getElementById('targetResult');
+
+            if (!isNaN(targetP) && targetP > 0 && targetP <= 100) {
+                const requiredTotalMarks = (targetP / 100) * 1100;
+                const neededInXii = requiredTotalMarks - xiTotal;
+
+                if (neededInXii <= 0) {
+                    targetBox.innerHTML = `🎯 <b>Target Status:</b> Aapka XI ka score hi overall <b>${targetP}%</b> achieve karne ke liye kaafi hai!`;
+                } else if (neededInXii > 550) {
+                    targetBox.innerHTML = `⚠️ <b>Target Status:</b> Overall <b>${targetP}%</b> ke liye Class XII me <b>${neededInXii.toFixed(1)} / 550</b> marks chahiye (jo ke maximum marks 550 se zyada hain).`;
+                } else {
+                    const reqXiiPerc = (neededInXii / 550) * 100;
+                    targetBox.innerHTML = `🎯 <b>Target Advice:</b> Overall <b>${targetP}%</b> lani ke liye aapko Class XII me kam az kam <b>${neededInXii.toFixed(1)} / 550 marks</b> (${reqXiiPerc.toFixed(2)}%) lene honge.`;
+                }
+                targetBox.style.display = "block";
+            } else {
+                targetBox.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
