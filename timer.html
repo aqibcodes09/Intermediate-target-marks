@@ -24,7 +24,6 @@
             position: relative;
         }
 
-        /* Ambient Glow Background */
         .bg-glow {
             position: absolute;
             width: 350px;
@@ -65,7 +64,6 @@
             margin-bottom: 25px;
         }
 
-        /* Circular Timer Ring */
         .timer-container {
             position: relative;
             width: 220px;
@@ -108,7 +106,6 @@
             text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
         }
 
-        /* Inputs */
         .inputs-grid {
             display: flex;
             justify-content: center;
@@ -149,10 +146,10 @@
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
         }
 
-        /* Controls */
         .btn-group {
             display: flex;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -166,11 +163,18 @@
             transition: all 0.2s ease;
             color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            min-width: 90px;
         }
 
         .btn-start { background: linear-gradient(135deg, #10b981, #059669); }
         .btn-pause { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .btn-reset { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .btn-stop-sound { 
+            background: linear-gradient(135deg, #ec4899, #be185d); 
+            display: none; 
+            width: 100%;
+            margin-top: 10px;
+        }
 
         button:hover {
             transform: translateY(-2px);
@@ -188,7 +192,6 @@
             font-weight: 600;
         }
 
-        /* Confetti Canvas */
         #confettiCanvas {
             position: absolute;
             top: 0;
@@ -209,7 +212,6 @@
     <h1>Focus Flow Timer 🌿</h1>
     <p>Apna goal set karein aur deep work mode me chale jaen!</p>
 
-    <!-- Ring Timer -->
     <div class="timer-container">
         <svg>
             <defs>
@@ -225,7 +227,6 @@
         <div class="timer-display" id="display">00:25:00</div>
     </div>
 
-    <!-- Time Setters -->
     <div class="inputs-grid">
         <div class="input-group">
             <label>Hours</label>
@@ -241,12 +242,13 @@
         </div>
     </div>
 
-    <!-- Buttons -->
     <div class="btn-group">
         <button class="btn-start" onclick="startTimer()">Start 🚀</button>
         <button class="btn-pause" onclick="pauseTimer()">Pause ⏸️</button>
         <button class="btn-reset" onclick="resetTimer()">Reset 🔄</button>
     </div>
+
+    <button class="btn-stop-sound" id="btnStopSound" onclick="stopSound()">Stop Sound 🛑</button>
 
     <div class="status-msg" id="statusMsg">Focus mode ready. Click start! ✨</div>
 </div>
@@ -255,13 +257,14 @@
     let totalSeconds = 0;
     let initialSeconds = 0;
     let timerInterval = null;
+    let soundInterval = null;
     let isRunning = false;
 
-    const CIRCUMFERENCE = 2 * Math.PI * 100; // 628
+    const CIRCUMFERENCE = 2 * Math.PI * 100;
     const progressRing = document.getElementById('progressRing');
     const bgGlow = document.getElementById('bgGlow');
+    const btnStopSound = document.getElementById('btnStopSound');
 
-    // Synthesis Soft Bird Chirp Sound Effect
     function playBirdChirp() {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
@@ -286,10 +289,24 @@
             }, delay);
         }
 
-        // Two soft chirps
         chirp(0, 2400);
         chirp(180, 2800);
         chirp(500, 2600);
+    }
+
+    function startContinuousSound() {
+        playBirdChirp();
+        soundInterval = setInterval(playBirdChirp, 1200);
+        btnStopSound.style.display = "block";
+    }
+
+    function stopSound() {
+        if (soundInterval) {
+            clearInterval(soundInterval);
+            soundInterval = null;
+        }
+        btnStopSound.style.display = "none";
+        document.getElementById('statusMsg').innerText = "Sound stopped! Excellent session. ✨";
     }
 
     function setProgress(percent) {
@@ -337,11 +354,10 @@
             if (totalSeconds <= 0) {
                 clearInterval(timerInterval);
                 isRunning = false;
-                document.getElementById('statusMsg').innerText = "Session Completed! Great Job! 🦜✨";
+                document.getElementById('statusMsg').innerText = "Session Completed! Click Stop Sound below. 🦜✨";
                 bgGlow.style.background = "radial-gradient(circle, rgba(244, 114, 182, 0.3), transparent 70%)";
                 
-                playBirdChirp();
-                setTimeout(playBirdChirp, 1000);
+                startContinuousSound();
                 triggerConfetti();
             }
         }, 1000);
@@ -356,6 +372,7 @@
 
     function resetTimer() {
         clearInterval(timerInterval);
+        stopSound();
         isRunning = false;
         totalSeconds = 0;
         initialSeconds = 0;
@@ -368,7 +385,6 @@
         setProgress(1);
     }
 
-    // Confetti Animation Effect
     const cCanvas = document.getElementById('confettiCanvas');
     const cCtx = cCanvas.getContext('2d');
     let particles = [];
@@ -400,7 +416,7 @@
             if (p.life > 0) {
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.2; // gravity
+                p.vy += 0.2;
                 p.life--;
                 alive = true;
 
@@ -414,7 +430,6 @@
         if (alive) requestAnimationFrame(animateConfetti);
     }
 
-    // Init
     setProgress(1);
 </script>
 
