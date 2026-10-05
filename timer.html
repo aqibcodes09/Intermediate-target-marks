@@ -224,21 +224,21 @@
             <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
             <circle class="circle-progress" id="progressRing" cx="110" cy="110" r="100"></circle>
         </svg>
-        <div class="timer-display" id="display">00:25:00</div>
+        <div class="timer-display" id="display">00:00:00</div>
     </div>
 
     <div class="inputs-grid">
         <div class="input-group">
             <label>Hours</label>
-            <input type="number" id="hrs" min="0" max="23" value="0">
+            <input type="number" id="hrs" min="0" max="23" value="0" oninput="syncDisplay()">
         </div>
         <div class="input-group">
             <label>Mins</label>
-            <input type="number" id="mins" min="0" max="59" value="25">
+            <input type="number" id="mins" min="0" max="59" value="0" oninput="syncDisplay()">
         </div>
         <div class="input-group">
             <label>Secs</label>
-            <input type="number" id="secs" min="0" max="59" value="0">
+            <input type="number" id="secs" min="0" max="59" value="0" oninput="syncDisplay()">
         </div>
     </div>
 
@@ -250,7 +250,7 @@
 
     <button class="btn-stop-sound" id="btnStopSound" onclick="stopSound()">Stop Sound 🛑</button>
 
-    <div class="status-msg" id="statusMsg">Focus mode ready. Click start! ✨</div>
+    <div class="status-msg" id="statusMsg">Focus mode ready. Enter time & click start! ✨</div>
 </div>
 
 <script>
@@ -264,6 +264,19 @@
     const progressRing = document.getElementById('progressRing');
     const bgGlow = document.getElementById('bgGlow');
     const btnStopSound = document.getElementById('btnStopSound');
+
+    function syncDisplay() {
+        if (isRunning) return;
+        let h = parseInt(document.getElementById('hrs').value) || 0;
+        let m = parseInt(document.getElementById('mins').value) || 0;
+        let s = parseInt(document.getElementById('secs').value) || 0;
+        
+        let hStr = h < 10 ? "0" + h : h;
+        let mStr = m < 10 ? "0" + m : m;
+        let sStr = s < 10 ? "0" + s : s;
+
+        document.getElementById('display').innerText = `${hStr}:${mStr}:${sStr}`;
+    }
 
     function playBirdChirp() {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -377,9 +390,9 @@
         totalSeconds = 0;
         initialSeconds = 0;
         document.getElementById('hrs').value = 0;
-        document.getElementById('mins').value = 25;
+        document.getElementById('mins').value = 0;
         document.getElementById('secs').value = 0;
-        document.getElementById('display').innerText = "00:25:00";
+        document.getElementById('display').innerText = "00:00:00";
         document.getElementById('statusMsg').innerText = "Ready for the next session! ✨";
         bgGlow.style.background = "radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent 70%)";
         setProgress(1);
