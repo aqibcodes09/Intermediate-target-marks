@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Timer with Cat Alarm 🐾</title>
+    <title>Dopamine Study Timer 🌿✨</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,54 +13,106 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            background: #090d16;
             color: #f8fafc;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Background */
+        .bg-glow {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+            transition: background 0.5s ease;
         }
 
         .card {
-            background: #1e293b;
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 35px 30px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
         }
 
         h1 {
-            color: #38bdf8;
-            font-size: 24px;
-            margin-bottom: 8px;
+            background: linear-gradient(to right, #38bdf8, #818cf8, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 26px;
+            margin-bottom: 6px;
         }
 
         p {
             color: #94a3b8;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 25px;
         }
 
-        .timer-display {
-            font-size: 48px;
-            font-weight: bold;
-            color: #facc15;
-            letter-spacing: 2px;
-            margin: 20px 0;
-            background: #0f172a;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px solid #334155;
+        /* Circular Timer Ring */
+        .timer-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+        }
+
+        .circle-bg {
+            stroke: rgba(255, 255, 255, 0.05);
+        }
+
+        .circle-progress {
+            stroke: url(#gradient);
+            stroke-dasharray: 628;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .timer-display {
+            position: absolute;
+            font-size: 38px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+        }
+
+        /* Inputs */
         .inputs-grid {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 25px;
         }
 
@@ -71,115 +123,178 @@
         }
 
         .input-group label {
-            font-size: 12px;
-            color: #cbd5e1;
-            margin-bottom: 5px;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .input-group input {
-            width: 75px;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #475569;
-            background: #0f172a;
-            color: white;
+            width: 70px;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.8);
+            color: #f1f5f9;
             font-size: 18px;
+            font-weight: bold;
             text-align: center;
             outline: none;
+            transition: 0.2s;
         }
 
         .input-group input:focus {
             border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
         }
 
+        /* Controls */
         .btn-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         button {
             flex: 1;
             padding: 12px;
             border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .btn-start { background: #22c55e; color: white; }
-        .btn-pause { background: #eab308; color: black; }
-        .btn-reset { background: #ef4444; color: white; }
+        .btn-start { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-pause { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .btn-reset { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
         button:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            filter: brightness(1.1);
         }
 
-        .cat-badge {
+        button:active {
+            transform: translateY(0);
+        }
+
+        .status-msg {
             margin-top: 20px;
-            font-size: 14px;
-            color: #f472b6;
+            font-size: 13px;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        /* Confetti Canvas */
+        #confettiCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Study Focus Timer 🐱</h1>
-    <p>Apna study duration set karein aur focus karein!</p>
+<div class="bg-glow" id="bgGlow"></div>
+<canvas id="confettiCanvas"></canvas>
 
+<div class="card">
+    <h1>Focus Flow Timer 🌿</h1>
+    <p>Apna goal set karein aur deep work mode me chale jaen!</p>
+
+    <!-- Ring Timer -->
+    <div class="timer-container">
+        <svg>
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="50%" stop-color="#818cf8" />
+                    <stop offset="100%" stop-color="#f472b6" />
+                </linearGradient>
+            </defs>
+            <circle class="circle-bg" cx="110" cy="110" r="100"></circle>
+            <circle class="circle-progress" id="progressRing" cx="110" cy="110" r="100"></circle>
+        </svg>
+        <div class="timer-display" id="display">00:25:00</div>
+    </div>
+
+    <!-- Time Setters -->
     <div class="inputs-grid">
         <div class="input-group">
             <label>Hours</label>
             <input type="number" id="hrs" min="0" max="23" value="0">
         </div>
         <div class="input-group">
-            <label>Minutes</label>
+            <label>Mins</label>
             <input type="number" id="mins" min="0" max="59" value="25">
         </div>
         <div class="input-group">
-            <label>Seconds</label>
+            <label>Secs</label>
             <input type="number" id="secs" min="0" max="59" value="0">
         </div>
     </div>
 
-    <div class="timer-display" id="display">00:25:00</div>
-
+    <!-- Buttons -->
     <div class="btn-group">
         <button class="btn-start" onclick="startTimer()">Start 🚀</button>
         <button class="btn-pause" onclick="pauseTimer()">Pause ⏸️</button>
         <button class="btn-reset" onclick="resetTimer()">Reset 🔄</button>
     </div>
 
-    <div class="cat-badge" id="statusMsg">Timer khatam hone par Cat Meow sound bajegi! 🐾</div>
+    <div class="status-msg" id="statusMsg">Focus mode ready. Click start! ✨</div>
 </div>
 
 <script>
     let totalSeconds = 0;
+    let initialSeconds = 0;
     let timerInterval = null;
     let isRunning = false;
 
-    // Cat Meow Sound effect (Web Audio API)
-    function playCatMeow() {
+    const CIRCUMFERENCE = 2 * Math.PI * 100; // 628
+    const progressRing = document.getElementById('progressRing');
+    const bgGlow = document.getElementById('bgGlow');
+
+    // Synthesis Soft Bird Chirp Sound Effect
+    function playBirdChirp() {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // Sound 1: High Meow
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        function chirp(delay, pitch) {
+            setTimeout(() => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(700, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 0.6);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(pitch, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(pitch * 1.5, audioCtx.currentTime + 0.08);
+                osc.frequency.exponentialRampToValueAtTime(pitch * 1.2, audioCtx.currentTime + 0.15);
 
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
 
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.6);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            }, delay);
+        }
+
+        // Two soft chirps
+        chirp(0, 2400);
+        chirp(180, 2800);
+        chirp(500, 2600);
+    }
+
+    function setProgress(percent) {
+        const offset = CIRCUMFERENCE - (percent * CIRCUMFERENCE);
+        progressRing.style.strokeDashoffset = offset;
     }
 
     function updateDisplay() {
@@ -192,6 +307,10 @@
         let sStr = s < 10 ? "0" + s : s;
 
         document.getElementById('display').innerText = `${hStr}:${mStr}:${sStr}`;
+
+        if (initialSeconds > 0) {
+            setProgress(totalSeconds / initialSeconds);
+        }
     }
 
     function startTimer() {
@@ -202,12 +321,14 @@
             let m = parseInt(document.getElementById('mins').value) || 0;
             let s = parseInt(document.getElementById('secs').value) || 0;
             totalSeconds = h * 3600 + m * 60 + s;
+            initialSeconds = totalSeconds;
         }
 
         if (totalSeconds <= 0) return;
 
         isRunning = true;
-        document.getElementById('statusMsg').innerText = "Study Mode ON! Focus Karein 📖";
+        document.getElementById('statusMsg').innerText = "Deep Focus Mode Active... 📖⚡";
+        bgGlow.style.background = "radial-gradient(circle, rgba(16, 185, 129, 0.25), transparent 70%)";
 
         timerInterval = setInterval(() => {
             totalSeconds--;
@@ -216,12 +337,12 @@
             if (totalSeconds <= 0) {
                 clearInterval(timerInterval);
                 isRunning = false;
-                document.getElementById('statusMsg').innerText = "Time Over! Great Job! 🐾 Meow!";
+                document.getElementById('statusMsg').innerText = "Session Completed! Great Job! 🦜✨";
+                bgGlow.style.background = "radial-gradient(circle, rgba(244, 114, 182, 0.3), transparent 70%)";
                 
-                // Play Cat Sound 3 times
-                playCatMeow();
-                setTimeout(playCatMeow, 700);
-                setTimeout(playCatMeow, 1400);
+                playBirdChirp();
+                setTimeout(playBirdChirp, 1000);
+                triggerConfetti();
             }
         }, 1000);
     }
@@ -230,18 +351,71 @@
         clearInterval(timerInterval);
         isRunning = false;
         document.getElementById('statusMsg').innerText = "Timer Paused ⏸️";
+        bgGlow.style.background = "radial-gradient(circle, rgba(245, 158, 11, 0.2), transparent 70%)";
     }
 
     function resetTimer() {
         clearInterval(timerInterval);
         isRunning = false;
         totalSeconds = 0;
+        initialSeconds = 0;
         document.getElementById('hrs').value = 0;
         document.getElementById('mins').value = 25;
         document.getElementById('secs').value = 0;
         document.getElementById('display').innerText = "00:25:00";
-        document.getElementById('statusMsg').innerText = "Timer Reset Ho Gaya Hai.";
+        document.getElementById('statusMsg').innerText = "Ready for the next session! ✨";
+        bgGlow.style.background = "radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent 70%)";
+        setProgress(1);
     }
+
+    // Confetti Animation Effect
+    const cCanvas = document.getElementById('confettiCanvas');
+    const cCtx = cCanvas.getContext('2d');
+    let particles = [];
+
+    function triggerConfetti() {
+        cCanvas.width = window.innerWidth;
+        cCanvas.height = window.innerHeight;
+        particles = [];
+
+        for (let i = 0; i < 120; i++) {
+            particles.push({
+                x: cCanvas.width / 2,
+                y: cCanvas.height / 2,
+                vx: (Math.random() - 0.5) * 12,
+                vy: (Math.random() - 0.5) * 12 - 4,
+                size: Math.random() * 8 + 4,
+                color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                life: 100
+            });
+        }
+        animateConfetti();
+    }
+
+    function animateConfetti() {
+        cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+        let alive = false;
+
+        particles.forEach(p => {
+            if (p.life > 0) {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2; // gravity
+                p.life--;
+                alive = true;
+
+                cCtx.fillStyle = p.color;
+                cCtx.beginPath();
+                cCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                cCtx.fill();
+            }
+        });
+
+        if (alive) requestAnimationFrame(animateConfetti);
+    }
+
+    // Init
+    setProgress(1);
 </script>
 
 </body>
